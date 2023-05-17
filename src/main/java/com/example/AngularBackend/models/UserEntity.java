@@ -3,9 +3,9 @@ package com.example.AngularBackend.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Objects;
 import java.util.UUID;
@@ -17,6 +17,7 @@ import java.util.UUID;
 public class UserEntity {
 
     @Id
+    @GeneratedValue(generator = "UUID")
     private UUID id;
 
     private String name;

@@ -7,22 +7,21 @@ import com.example.AngularBackend.models.UserResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
 
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
 
-    public UserResponse createUser(CreateNewUserRequest req) throws UserAlreadyExistsException{
+    public UserResponse createUser(CreateNewUserRequest req) {
 
         Optional<UserEntity> foundUser= this.userRepository.findByName(req.getName());
 
@@ -40,10 +39,10 @@ public class UserService {
 
         Optional<UserEntity> foundUser= this.userRepository.findByName(req.getName());
 
-        if(foundUser.isPresent()) {
-            return this.userMapper.toResponse(foundUser.get());
+        if(foundUser.isEmpty()) {
+            throw new UserNotFoundException("User : "+req.getName()+" Does not exist");
         }
 
-        return new UserResponse(new UUID(0L,0L),"");
+        return this.userMapper.toResponse(foundUser.get());
     }
 }
